@@ -12,25 +12,8 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import BottomNavigation from "../components/BottomNavigation";
 import BannerCarousel from "../components/BannerCarousel";
 import ProCardCarousel from "../components/ProCardCarousel";
-import { getPros } from "../libs/apiConfig";
-
-const banners = [
-  {
-    id: 1,
-    image: require("../assets/images/dog-banner.png"),
-    title: "La première application pour suivre la santé de son animal",
-  },
-  {
-    id: 2,
-    image: require("../assets/images/dog-banner.png"),
-    title: "Suivez le bien-être de vos compagnons",
-  },
-  {
-    id: 3,
-    image: require("../assets/images/dog-banner.png"),
-    title: "Prenez soin de vos animaux avec notre aide",
-  },
-];
+import PodcastSection from "../components/PodcastSection";
+import { getPros, getBanners } from "../libs/apiConfig";
 
 interface Animal {
   id: number;
@@ -46,28 +29,26 @@ interface Pro {
   imageUrl: any;
 }
 
+interface Banner {
+  id: number;
+  title: string;
+  image: any;
+}
+
 const HomePage: React.FC = () => {
   const [pros, setPros] = useState<Pro[]>([]);
+  const [banners, setBanners] = useState<Banner[]>([]);
 
   useEffect(() => {
-    const fetchPros = async () => {
+    const fetchData = async () => {
       const prosData = await getPros();
-      const formattedPros = prosData.map((pro: any) => ({
-        id: pro.id,
-        name: pro.name,
-        profession: pro.profession,
-        location: pro.location,
-        animals: pro.animals.map((animal: any) => ({
-          id: animal.id,
-          name: animal.name,
-        })),
-        imageUrl: require("../assets/images/pdp-default.png"),
-      }));
+      setPros(prosData);
 
-      setPros(formattedPros);
+      const bannersData = await getBanners();
+      setBanners(bannersData);
     };
 
-    fetchPros();
+    fetchData();
   }, []);
 
   const handleBannerPress = (id: number) => {
@@ -126,11 +107,13 @@ const HomePage: React.FC = () => {
 
           <BannerCarousel banners={banners} onBannerPress={handleBannerPress} />
 
-          <Text className="text-xl font-bold font-montserrat text-[#F14E48] mt-6 text-center">
+          <Text className="text-xl font-bold font-montserrat text-[#F14E48] mt-6 mb-4 text-center">
             Les pets pro proche de chez moi :
           </Text>
 
           <ProCardCarousel pros={pros} />
+
+          <PodcastSection />
         </ImageBackground>
       </ScrollView>
 

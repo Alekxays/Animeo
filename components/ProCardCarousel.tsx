@@ -31,7 +31,7 @@ const ProCardCarousel: React.FC<ProCardCarouselProps> = ({ pros }) => {
     if (scrollRef.current) {
       const newIndex = Math.max(currentIndex - 1, 0);
       scrollRef.current.scrollTo({
-        x: newIndex * (screenWidth * 0.9 + 16),
+        x: newIndex * (screenWidth * 0.85 + 16),
         animated: true,
       });
       setCurrentIndex(newIndex);
@@ -42,7 +42,7 @@ const ProCardCarousel: React.FC<ProCardCarouselProps> = ({ pros }) => {
     if (scrollRef.current) {
       const newIndex = Math.min(currentIndex + 1, pros.length - 1);
       scrollRef.current.scrollTo({
-        x: newIndex * (screenWidth * 0.9 + 16),
+        x: newIndex * (screenWidth * 0.85 + 16),
         animated: true,
       });
       setCurrentIndex(newIndex);
@@ -51,12 +51,12 @@ const ProCardCarousel: React.FC<ProCardCarouselProps> = ({ pros }) => {
 
   const handleScroll = (event: any) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
-    const index = Math.round(scrollPosition / (screenWidth * 0.9 + 16));
+    const index = Math.round(scrollPosition / (screenWidth * 0.85 + 16));
     setCurrentIndex(index);
   };
 
   return (
-    <View className="relative flex-1">
+    <View className="relative flex-1 items-center">
       {currentIndex > 0 && (
         <TouchableOpacity
           className="absolute left-2 top-1/2 -translate-y-1/2 z-10 p-2"
@@ -71,10 +71,13 @@ const ProCardCarousel: React.FC<ProCardCarouselProps> = ({ pros }) => {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ alignItems: "center" }}
+        contentContainerStyle={{
+          alignItems: "center",
+          paddingHorizontal: (screenWidth - screenWidth * 0.85) / 2,
+        }}
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        snapToInterval={screenWidth * 0.9 + 16}
+        snapToInterval={screenWidth * 0.85 + 16}
         decelerationRate="fast"
       >
         {pros.map((pro) => (
@@ -86,7 +89,7 @@ const ProCardCarousel: React.FC<ProCardCarouselProps> = ({ pros }) => {
             animals={pro.animals}
             imageUrl={pro.imageUrl}
             style={{
-              width: screenWidth * 0.9,
+              width: screenWidth * 0.85,
               marginHorizontal: 8,
             }}
           />

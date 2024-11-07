@@ -2,7 +2,9 @@
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = process.env.API_URL || "http://10.38.164.26:1337/api";
+const API_URL =
+  process.env.API_URL ||
+  "https://grateful-vacation-fc846330dc.strapiapp.com/api";
 
 export const login = async (email: string, password: string) => {
   try {

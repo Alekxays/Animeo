@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useRouter, usePathname } from "expo-router";
 import { isAuthenticated, logout } from "../libs/authService";
 
-// Configuration des pages pour simplifier le code
+// Configuration des pages
 const pages = [
   {
     key: "Accueil",
@@ -30,7 +30,7 @@ const pages = [
   {
     key: "Animaux",
     icon: <FontAwesome5 name="paw" size={18} />,
-    route: "/animals",
+    route: "/report",
     requiresAuth: true,
   },
   {
@@ -44,6 +44,7 @@ const BottomNavigation: React.FC = () => {
   const [activePage, setActivePage] = useState<string>("Accueil");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const router = useRouter();
+  const pathname = usePathname(); // Utilisez le chemin actuel
 
   useEffect(() => {
     // Vérifie si l'utilisateur est authentifié au montage du composant
@@ -54,7 +55,13 @@ const BottomNavigation: React.FC = () => {
     checkAuthStatus();
   }, []);
 
-  // Fonction de navigation pour gérer l'authentification et rediriger vers les bonnes pages
+  useEffect(() => {
+    // Met à jour `activePage` en fonction de la route active
+    const currentPage = pages.find((page) => page.route === pathname)?.key;
+    if (currentPage) setActivePage(currentPage);
+  }, [pathname]);
+
+  // Fonction de navigation
   const handlePress = async (
     page: string,
     route: string,
@@ -63,17 +70,19 @@ const BottomNavigation: React.FC = () => {
     setActivePage(page);
     if (requiresAuth) {
       const isUserAuthenticated = await isAuthenticated();
-      router.push(isUserAuthenticated ? (route as any) : ("/auth" as any));
+      router.push(
+        isUserAuthenticated ? (route as any) : ("/auth/login" as any)
+      );
     } else {
       router.push(route as any);
     }
   };
 
   const handleLogout = async () => {
-    await logout(); // Appelez la fonction de déconnexion
-    setIsLoggedIn(false); // Mettez à jour l'état de connexion
-    setActivePage("Accueil"); // Retourne à la page d'accueil après la déconnexion
-    router.push("/"); // Redirige vers la page d'accueil
+    await logout();
+    setIsLoggedIn(false);
+    setActivePage("Accueil");
+    router.push("/");
   };
 
   return (

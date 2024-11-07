@@ -29,7 +29,7 @@ const SignupScreen: React.FC = () => {
         "Inscription réussie",
         `Bienvenue, ${user.username || username}!`
       );
-      router.push("/"); // Redirige vers la page d'accueil
+      router.push("/");
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Échec de l'inscription";

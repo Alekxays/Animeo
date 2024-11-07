@@ -13,7 +13,7 @@ interface ProCardProps {
   location: string;
   animals: Animal[];
   imageUrl: any;
-  style?: StyleProp<ViewStyle>; // Ajout de la propriété style
+  style?: StyleProp<ViewStyle>;
 }
 
 const ProCard: React.FC<ProCardProps> = ({
@@ -25,30 +25,32 @@ const ProCard: React.FC<ProCardProps> = ({
   style,
 }) => {
   return (
-    <View
-      className="bg-white rounded-lg p-4 flex-row items-center shadow-md"
-      style={style}
-    >
-      <Image source={imageUrl} className="w-16 h-16 rounded-full" />
-      <View className="ml-4 flex-1">
-        <Text className="text-lg font-bold text-[#2A3FDD]">{name}</Text>
-        <Text className="text-sm text-[#C34C2B]">{profession}</Text>
-        <View className="flex-row items-center mt-2">
-          <Ionicons name="location" size={16} color="#C34C2B" />
-          <Text className="ml-1 text-sm text-gray-600">{location}</Text>
+    <View className="flex-1 justify-center items-center bg-gray-100">
+      <View
+        className="bg-white rounded-lg p-4 flex-row items-center w-80"
+        style={style}
+      >
+        <Image source={imageUrl} className="w-16 h-16 rounded-full" />
+        <View className="ml-4 flex-1">
+          <Text className="text-lg font-bold text-[#2A3FDD]">{name}</Text>
+          <Text className="text-sm text-[#C34C2B]">{profession}</Text>
+          <View className="flex-row items-center mt-2">
+            <Ionicons name="location" size={16} color="#C34C2B" />
+            <Text className="ml-1 text-sm text-gray-600">{location}</Text>
+          </View>
+          <View className="flex-row mt-2 space-x-2">
+            {animals.map((animal) => (
+              <View
+                key={animal.id}
+                className="bg-gray-200 px-2 py-1 rounded-full"
+              >
+                <Text>{animal.name}</Text>
+              </View>
+            ))}
+          </View>
         </View>
-        <View className="flex-row mt-2 space-x-2">
-          {animals.map((animal) => (
-            <View
-              key={animal.id}
-              className="bg-gray-200 px-2 py-1 rounded-full"
-            >
-              <Text>{animal.name}</Text>
-            </View>
-          ))}
-        </View>
+        <Ionicons name="heart" size={24} color="#C34C2B" />
       </View>
-      <Ionicons name="heart" size={24} color="#C34C2B" />
     </View>
   );
 };
